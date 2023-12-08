@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import { createUser, findByEmail } from "../services/user.service";
+import { createUser, findByEmail, findByUserName } from "../services/user.service";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -25,12 +27,39 @@ export const register = async (req: Request, res: Response) => {
   }
 }
 
-export const Login = (req: Request, res: Response) => {
+export const Login = async (req: Request, res: Response) => {
   try {
-    res.status(200).json({
-      message: 'Đăng nhập thành công'
+    const { user_name, password } = req.body;
+    const existUser = await findByUserName(user_name)
+    if (!existUser) {
+      return res.status(400).json({
+        message: 'Tài khoản chưa được đăng ký'
+      })
+    }
+
+    const comparePassword = await bcrypt.compare(password, existUser.password)
+    if (!comparePassword) {
+      return res.status(400).json({
+        message: 'Mật khẩu không trùng khớp'
+      })
+    }
+
+    const accessToken = jwt.sign({ user: existUser._id }, "asd21vaszx", {
+      expiresIn: '1d',
+    })
+
+    return res.status(200).json({
+      status: 200,
+      message: 'Đăng nhập thành công',
+      data: {
+        user_name: user_name,
+        accessToken: accessToken
+      }
     })
   } catch (error) {
-
+    return res.status(500).json({
+      status: 500,
+      message: error
+    })
   }
 }
