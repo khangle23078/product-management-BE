@@ -7,8 +7,8 @@ const productModel = new Schema<Product>({
     required: true
   },
   image: {
-    type: String,
-    reuqired: true
+    public_id: String,
+    url: String
   },
   price: {
     type: Number,
