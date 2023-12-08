@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { Product } from "../interfaces";
+import { Product } from "../interfaces/product";
 
-const productModel = new Schema<Product>({
+const productSchema = new Schema<Product>({
   name: {
     type: String,
     required: true
@@ -20,4 +20,4 @@ const productModel = new Schema<Product>({
   }
 }, { timestamps: true })
 
-export const product = model('product', productModel)
+export const product = model('product', productSchema)

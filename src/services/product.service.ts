@@ -1,4 +1,4 @@
-import { Product } from "../interfaces"
+import { Product } from "../interfaces/product"
 import { product } from "../models/product.model"
 
 export const getAll = () => {
