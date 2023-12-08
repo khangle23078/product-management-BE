@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createOne, getAll, getById, updateById } from "../services/product.service";
+import { createOne, deleteById, getAll, getById, updateById } from "../services/product.service";
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
@@ -50,11 +50,26 @@ export const createProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const response = await updateById(id, req.body)
-    console.log(response);
+    await updateById(id, req.body)
     return res.status(200).json({
       status: 200,
       message: "Cập nhật sản phẩm thành công"
+    })
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: error
+    })
+  }
+}
+
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await deleteById(id)
+    return res.status(200).json({
+      status: 200,
+      message: "Xóa sản phẩm thành công"
     })
   } catch (error) {
     return res.status(500).json({

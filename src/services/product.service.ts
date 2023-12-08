@@ -16,3 +16,7 @@ export const updateById = (id: string, data: Product) => {
 export const createOne = (data: Product) => {
   return product.create(data)
 }
+
+export const deleteById = (id: string) => {
+  return product.findByIdAndDelete(id)
+}
